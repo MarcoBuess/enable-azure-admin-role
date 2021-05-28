@@ -1,4 +1,5 @@
-#Requires -Modules AzureADPreview
+#Requires -Version 5.1
+#Requires -Modules ActiveDirectory, AzureADPreview, @{ ModuleName="PowerShellGet"; RequiredVersion="2.2.5" }, MSAL.PS
 
 [CmdletBinding()]
 Param(
@@ -14,8 +15,33 @@ Param(
     [string]$activationDuration
 )
 
+# Gets upn for executing user from active directory
+$userUpn =
+    Get-ADUser -Filter "SamAccountName -eq '$([System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split('\')[1])'" |
+    select -ExpandProperty UserPrincipalName
+
+# Hack to work around known issue for MFA
+# Taken from http://www.anujchaudhary.com/2020/02/connect-to-azure-ad-powershell-with-mfa.html
+$MsResponse =
+    Get-MSALToken -Scopes @("https://graph.microsoft.com/.default") `
+                  -ClientId "1b730954-1685-4b74-9bfd-dac224a7b894" `
+                  -RedirectUri "urn:ietf:wg:oauth:2.0:oob" `
+                  -Authority "https://login.microsoftonline.com/common" `
+                  -Interactive `
+                  -ExtraQueryParameters @{claims='{"access_token" : {"amr": { "values": ["mfa"] }}}'}
+
+# Get token for AAD Graph
+$AadResponse =
+    Get-MSALToken -Scopes @("https://graph.windows.net/.default") `
+                  -ClientId "1b730954-1685-4b74-9bfd-dac224a7b894" `
+                  -RedirectUri "urn:ietf:wg:oauth:2.0:oob" `
+                  -Authority "https://login.microsoftonline.com/common"
+
 # Establish AAD session
-$session = Connect-AzureAD
+$session =
+    Connect-AzureAD -AadAccessToken $AadResponse.AccessToken `
+                    -MsAccessToken $MsResponse.AccessToken `
+                    -AccountId $userUpn
 
 # AAD object id of the user of the current session
 $userObjectId =
