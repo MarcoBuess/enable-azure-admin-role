@@ -28,3 +28,8 @@ HttpStatusCode: BadRequest
 HttpStatusDescription: Bad Request
 HttpResponseStatus: Completed
 ```
+
+## Resources
+
+* http://www.anujchaudhary.com/2020/02/connect-to-azure-ad-powershell-with-mfa.html
+* https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/powershell-for-azure-ad-roles
