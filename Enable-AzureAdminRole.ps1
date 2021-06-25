@@ -11,7 +11,7 @@ Param(
     [string]$activationReason,
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
-    [ValidateRange(1,8)]
+    [ValidateRange(1,9)]
     [string]$activationDuration
 )
 
