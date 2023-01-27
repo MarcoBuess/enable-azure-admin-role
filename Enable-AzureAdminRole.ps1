@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-#Requires -Modules ActiveDirectory, AzureADPreview, @{ ModuleName="PowerShellGet"; RequiredVersion="2.2.5" }, MSAL.PS
+#Requires -Modules ActiveDirectory, AzureADPreview, @{ ModuleName="PowerShellGet"; RequiredVersion="2.2.5" }, @{ ModuleName="MSAL.PS"; RequiredVersion="4.37.0.0" }
 
 [CmdletBinding()]
 Param(
