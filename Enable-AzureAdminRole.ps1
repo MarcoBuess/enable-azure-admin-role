@@ -25,7 +25,7 @@ $userUpn =
 $MsResponse =
     Get-MSALToken -Scopes @("https://graph.microsoft.com/.default") `
                   -ClientId "1b730954-1685-4b74-9bfd-dac224a7b894" `
-                  -RedirectUri "urn:ietf:wg:oauth:2.0:oob" `
+                  -RedirectUri "https://login.microsoftonline.com/common/oauth2/nativeclient" `
                   -Authority "https://login.microsoftonline.com/common" `
                   -Interactive `
                   -ExtraQueryParameters @{claims='{"access_token" : {"amr": { "values": ["mfa"] }}}'}
@@ -34,7 +34,7 @@ $MsResponse =
 $AadResponse =
     Get-MSALToken -Scopes @("https://graph.windows.net/.default") `
                   -ClientId "1b730954-1685-4b74-9bfd-dac224a7b894" `
-                  -RedirectUri "urn:ietf:wg:oauth:2.0:oob" `
+                  -RedirectUri "https://login.microsoftonline.com/common/oauth2/nativeclient" `
                   -Authority "https://login.microsoftonline.com/common"
 
 # Establish AAD session
